@@ -1,0 +1,71 @@
+openapi: 3.0.0
+info:
+  title: Order Details API
+  version: 1.0.0
+  description: Order details API to get order information
+servers:
+  - url: http://localhost:3000
+    description: Development server
+paths:
+  /api/orders/{orderId}:
+    get:
+      tags:
+        - Orders
+      summary: Get order details
+      operationId: getOrderDetails
+      parameters:
+        - in: path
+          name: orderId
+          required: true
+          schema:
+            type: string
+          description: Order id to check the status for
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderDetailResponse'
+        '404':
+          description: Order not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+      security:
+        - ApiKeyAuth: []
+components:
+  schemas:
+    OrderDetailResponse:
+      type: object
+      properties:
+        orderNumber:
+          type: string
+          description: Order number for the order
+        orderStatus:
+          type: string
+          description: Order status of the order
+        orderDate:
+          type: string
+          description: Order date when the order was placed
+        customerName:
+          type: string
+          description: Name of Customer for the order
+        productName:
+          type: string
+          description: Product Name shipped in the order
+        productCode:
+          type: string
+          description: Product Code for product shipped in the order
+        quantity:
+          type: number
+          description: Number of the products in the order
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: x-api-key
